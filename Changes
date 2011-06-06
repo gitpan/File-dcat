@@ -1,0 +1,8 @@
+0.02  Mon Jun  6 17:40:37 2011
+    - larger read buffer
+    - support multiply files
+    - support copying STDIN
+	- warn about Linux compability
+
+0.01  Sun Feb  6 19:49:27 2011
+	- original version

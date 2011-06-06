@@ -1,0 +1,45 @@
+#!/usr/bin/perl
+use strict;
+
+use IO::File;
+our $VERSION = 0.02;
+
+$| = 1;
+
+if (!scalar @ARGV){
+    print "usage: dcat [file ...]\n";
+    exit 0;
+}
+
+meow($_) foreach (@ARGV);
+
+sub meow{
+    my $fname = shift;
+    
+    my $file;
+    if ($fname eq '-'){
+        $file = \*STDIN;
+
+    }else{
+        if (! -f $fname){
+            warn "cat: $fname: is not readable\n";
+            return;
+        }
+        
+        $file = IO::File->new($fname, O_DIRECT | O_RDONLY);
+        if (!$file){
+            warn "cat: $fname: $!\n";
+            return;
+        }
+    }
+
+    my ($buf, $err);
+    while ((my $err = $file->sysread($buf, 64 * 1024)) > 0){
+        print $buf;
+    }
+    
+    if ($err < 0){
+        warn "cat: $file: $!\n";
+    }
+}
+
